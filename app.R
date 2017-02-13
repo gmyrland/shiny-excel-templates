@@ -68,6 +68,11 @@ generate_spreadsheet <- function(options, ...) {
     return(list(status=0, message="Success", path=path))
 }
 
+## Open Spreadsheet
+open_spreadsheet <- function(path) {
+    system2("xdg-open", paste0('"', path, '"'))
+}
+
 ## Shiny UI
 ui <- fluidPage(
     tags$title("Custom Spreadsheet Builder"),
@@ -109,7 +114,7 @@ server <- function(input, output, session) {
         )
         output$results <- renderText(paste("Status:", res$message))
         if (res$status == 0) {
-            system2("open", paste0('"', res$path, '"'))
+            open_spreadsheet(res$path)
         }
     })
     session$onSessionEnded(function() stopApp(returnValue=NULL))
